@@ -10,6 +10,10 @@ public class Tester {
 
 		Board newBoard = new Board();
 		
+		newBoard.populateRandomBoard();
+		
+		
+		
 		for(int i = 0; i < 9; i++)
 			for(int j = 0; j < 9; j++)
 			{

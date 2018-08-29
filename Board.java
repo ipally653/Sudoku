@@ -1,3 +1,4 @@
+import java.util.Random;
 /*
  * The board class stores a 2 dimensional array of cells to be displayed as a board later
  * For coordinate purposes the origin of x and y will be the bottom left corner
@@ -17,6 +18,33 @@ public class Board {
 			for(int y = 0; y < 9; y++)
 			{
 				actualBoard[x][y] = new Cell(x+1, "red");
+			}
+		}
+	}
+	
+	/**
+	 * This method makes a practice board, does not necessarily follow sudoku rules
+	 */
+	public void populateRandomBoard()
+	{
+		Random rand = new Random();
+		LinkList numbers = new LinkList();
+		
+		for(int i = 0; i < 9; i++)
+		{
+			for(int j = 0; j < 9; j++)
+			{
+				int randNum = rand.nextInt(9) + 1;
+				System.out.println("here");
+				if(!numbers.containNumber(randNum))
+				{
+					numbers.addNode(randNum);
+				}	
+			}
+			for(int j = 0; j < 9; j++)
+			{
+				int value = numbers.head.getValue();
+				actualBoard[i][j].setValue(value);
 			}
 		}
 	}
