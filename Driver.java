@@ -6,6 +6,9 @@ public class Driver {
 		
 		Board newBoard = new Board();
 		System.out.println(newBoard);
+		boolean x = false;
+		x = newBoard.checkNum(3, 4, 2);
+		System.out.println(x);
 	}
 
 }

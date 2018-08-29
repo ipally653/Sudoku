@@ -16,9 +16,28 @@ public class Board {
 		{
 			for(int y = 0; y < 9; y++)
 			{
-				actualBoard[x][y] = new Cell(1,"red");
+				actualBoard[x][y] = new Cell(x+1, "red");
 			}
 		}
+	}
+	
+	/**
+	 * gets a cell from the board
+	 * @param x coord
+	 * @param y coord
+	 * @return cell at x, y coords
+	 */
+	public Cell getCell(int x, int y)
+	{
+		Cell result = new Cell();
+		result.setValue(actualBoard[x][y].getValue());
+		return result;
+	}
+	
+	public int getCellValue(int x, int y)
+	{
+		int result = actualBoard[x][y].getValue();
+		return result;
 	}
 	/**
 	 * 
@@ -32,6 +51,53 @@ public class Board {
 		actualBoard[x][y].setColor(newCell.getColor());
 		
 	}
+	
+	/**
+	 * This function checks each number against all others on the board
+	 * to see if the current cell is breaking the rules
+	 * @param x coord
+	 * @param y coord
+	 * @param value in cell
+	 * @return T/F whether cell breaks a rule
+	 */
+	public boolean checkNum(int x, int y, int value) 
+	{
+		//compares value to all other x values
+		boolean xValid = true;
+		for(int i = 0; i < 9; i++)
+		{
+			if(x != i && value == actualBoard[i][y].getValue())
+				xValid = false;
+		}
+		
+		//compares value to all other y values
+		boolean yValid = true;
+		for(int i = 0; i < 9; i++)
+		{
+			if(y != i && value == actualBoard[x][i].getValue())
+				yValid = false;
+		}
+		
+		//compares value to other values in 3x3 subsquare
+		boolean squareValid = true;
+		CoordOperations subSquare = new CoordOperations();
+		int[] subOrigin = subSquare.getSquareCompareCoords(x, y);
+		int xSubOrigin = subOrigin[0];
+		int ySubOrigin = subOrigin[1];
+		
+		for(int i = xSubOrigin; i < xSubOrigin + 2; i++)
+			for(int j = ySubOrigin; j < ySubOrigin + 2; j++)
+			{
+				if(x != i &&
+						y != j &&
+						value == actualBoard[i][j].getValue())
+				squareValid = false;
+			}
+		
+		
+		return xValid && yValid && squareValid;
+	}
+	
 	/**
 	 * returns the full board representation
 	 */

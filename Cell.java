@@ -6,6 +6,15 @@
 public class Cell {
 	private int value;
 	private String color;
+
+	/**
+	 * default constructor
+	 */
+	public Cell()
+	{
+		setValue(1);
+		setColor("red");
+	}
 	
 	/**
 	 * @param value - desired value of cell
@@ -55,6 +64,6 @@ public class Cell {
 	
 	public String toString()
 	{
-		return "value: " + value + " color: " + color;
+		return value + "";
 	}
 }
