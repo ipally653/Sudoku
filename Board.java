@@ -17,7 +17,7 @@ public class Board {
 		{
 			for(int y = 0; y < 9; y++)
 			{
-				actualBoard[x][y] = new Cell(x+1, "red");
+				actualBoard[x][y] = new Cell(-1, "red");
 			}
 		}
 	}
@@ -25,28 +25,75 @@ public class Board {
 	/**
 	 * This method makes a practice board, does not necessarily follow sudoku rules
 	 */
-	public void populateRandomBoard()
+	public int populateBoard(int currX, int currY, int finish)
 	{
-		Random rand = new Random();
-		LinkList numbers = new LinkList();
-		
-		for(int i = 0; i < 9; i++)
+		//if board is filled, exit recursion
+		if(finish == 82)
 		{
-			for(int j = 0; j < 9; j++)
+			System.out.println("Finished!");
+			return finish;
+		}
+		//else try and insert a new cell
+		else
+		{
+			System.out.println("current X: " + currX + " current Y: " + currY + " current count: " + finish);
+			System.out.println("current board: \n" + this.toString());
+			Cell emptyCell = new Cell(-1, "red");
+			
+			int pool[] = new int[9];
+			for(int i = 0; i < 9; i++)
+				pool[i] = 0;
+			//keeps executing til numbers 1-9 have been tried
+			while(pool[0] == 0 || 
+					pool[1] == 0 ||	
+					pool[2] == 0 || 
+					pool[3] == 0 || 
+					pool[4] == 0 ||	
+					pool[5] == 0 ||	
+					pool[6] == 0 ||	
+					pool[7] == 0 || 
+					pool[8] == 0)
 			{
+				//get a random number
+				Random rand = new Random();
 				int randNum = rand.nextInt(9) + 1;
-				System.out.println("here");
-				if(!numbers.containNumber(randNum))
+				while(pool[randNum-1] != 0)
+					randNum = rand.nextInt(9)+1;
+				
+				//add number to list of numbers
+				pool[randNum-1]++;
+				
+				//if number fits in puzzle, insert it
+				if(this.checkNum(currX, currY, randNum))
 				{
-					numbers.addNode(randNum);
-				}	
+					Cell newCell = new Cell(randNum, "red");
+					this.setCell(currX, currY, newCell);
+					if(currX < 8)
+						return populateBoard(++currX, currY, ++finish);
+					else
+						return populateBoard(0, ++currY, ++finish);
+				}				
+			}	
+			//if this point is reached without recusing then that
+			//means no number will fit on the board in this spot without 
+			//recursing backwards
+			
+			//delete previous cell
+			if(currX == 0)
+			{	
+				System.out.println("Recursing");
+				this.setCell(8, --currY, emptyCell);
+				return populateBoard(8, --currY, --finish);
 			}
-			for(int j = 0; j < 9; j++)
+			else
 			{
-				int value = numbers.head.getValue();
-				actualBoard[i][j].setValue(value);
+				System.out.println("Recursing");
+				this.setCell(--currX, currY, emptyCell);
+				return populateBoard(--currX, currY, --finish);
 			}
 		}
+		
+		
 	}
 	
 	/**
@@ -73,7 +120,7 @@ public class Board {
 	 * @param y - y coord of new Cell
 	 * @param newCell - new Cell to be inserted
 	 */
-	public void placeCell(int x, int y, Cell newCell)
+	public void setCell(int x, int y, Cell newCell)
 	{
 		actualBoard[x][y].setValue(newCell.getValue());
 		actualBoard[x][y].setColor(newCell.getColor());
@@ -86,7 +133,7 @@ public class Board {
 	 * @param x coord
 	 * @param y coord
 	 * @param value in cell
-	 * @return T/F whether cell breaks a rule
+	 * @return True if the cell fits in the current board, false otherwise
 	 */
 	public boolean checkNum(int x, int y, int value) 
 	{
@@ -132,9 +179,9 @@ public class Board {
 	public String toString()
 	{
 		String result = "";
-		for(int x = 0; x < 9; x++)
+		for(int y = 8; y > -1; y--)
 		{
-			for(int y = 8; y > -1; y--)
+			for(int x = 0; x < 9; x++)
 			{
 				result = result + actualBoard[x][y].toString();
 			}

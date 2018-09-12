@@ -1,6 +1,6 @@
 /*
  * This class is to perform operations using coordinates, such as finding ranges 
- * of coords that should be compared, mostly apart from board class to improve 
+ * of coords that should be compared, this is mostly apart from board class to improve 
  * readability of code
  */
 public class CoordOperations {
