@@ -23,16 +23,6 @@ public class Tester {
 			}*/
 		
 	}
-	private static int testMethod(int x)
-	{
-		System.out.println("X: " + x);
-		if(x < 10)
-			return testMethod(++x);
-		else
-			return x;
-		//System.out.println("X: " + x);
-		
-		
-	}
+
 
 }
