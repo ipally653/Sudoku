@@ -16,15 +16,17 @@ public class CoordOperations {
 	 */
 	public int[] getSquareCompareCoords(int x, int y)
 	{
+		//System.out.println("x: " + x + " y: " + y);
 		int coord[] = new int[2];
 		
 		if(x % 3 == 1) x--;
-		if(x % 3 == 2)x = x - 2;
-		else x++;		
-		if(y % 3 == 1) y--;
-		if(y % 3 == 2) y = y - 2;
-		else y++;
+		else if(x % 3 == 2) x = x - 2;		
 		
+		if(y % 3 == 1) y--;
+		else if(y % 3 == 2) y = y - 2;
+		
+		//System.out.println("New x: " + x + " new y: " + y);
+
 		coord[0] = x;
 		coord[1] = y;
 		return coord;

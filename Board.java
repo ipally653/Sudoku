@@ -35,8 +35,6 @@ public class Board {
 		while(currentCell < 81)
 		{
 			boolean fits = false;
-			System.out.println("current X: " + currX + " current Y: " + currY + " current count: " + currentCell);
-			System.out.println("current board: \n" + this.toString());
 			
 			Cell emptyCell = new Cell(-1, "red");
 			
@@ -64,14 +62,8 @@ public class Board {
 					if(triedNums[currentCell][counter++] == 0)
 						allNumsTried = false;
 						
-				System.out.println(allNumsTried);
 				//add number to list of numbers used already
-				System.out.println("rand: " + randNum + " triedNums: " + triedNums[currentCell][randNum-1]);
 				triedNums[currentCell][randNum-1]++;
-				if(triedNums[currentCell][randNum-1] > 1)
-				{
-					System.out.println("DUN BROK");
-				}
 				
 				//if number fits in puzzle, insert it
 				if(this.checkNum(currX, currY, randNum) && !allNumsTried)
@@ -119,6 +111,47 @@ public class Board {
 		return currentCell;
 	}
 	
+	public void createFinalBoard(String difficulty)
+	{
+		int counter = 0;
+		Random rand = new Random();
+		int randSquares = rand.nextInt(10) + 1;
+		int randPosOrNeg = rand.nextInt(2);
+		randSquares = randSquares / 2;
+		if(randPosOrNeg == 1)
+			randSquares = randSquares - (randSquares * 2);
+		if(difficulty.equals("medium"))
+			randSquares = randSquares + 5;
+		if(difficulty.equals("hard"))
+			randSquares = randSquares + 10;
+		while(counter < (15 + randSquares))
+		{
+			int randX = rand.nextInt(9);
+			int randY = rand.nextInt(9);
+			
+			if(getCell(randX, randY).getValue() != 0)
+			{
+				Cell blankCell = new Cell(0, "green");
+				this.setCell(randX, randY, blankCell);
+				counter++;
+			}
+		}
+	}
+	public boolean userChangeCell(int x, int y, int newValue)
+	{
+		if(getCell(x, y).getColor().equals("red"))
+		{
+			System.out.println(getCell(x,y).getColor());
+			return false;
+		}
+		else
+		{
+			Cell newCell = new Cell(newValue, "green");
+			this.setCell(x, y, newCell);
+			return true;
+		}
+	}
+	
 	/**
 	 * gets a cell from the board
 	 * @param x coord
@@ -129,6 +162,7 @@ public class Board {
 	{
 		Cell result = new Cell();
 		result.setValue(actualBoard[x][y].getValue());
+		result.setColor(actualBoard[x][y].getColor());
 		return result;
 	}
 	
@@ -183,17 +217,31 @@ public class Board {
 		int xSubOrigin = subOrigin[0];
 		int ySubOrigin = subOrigin[1];
 		
-		for(int i = xSubOrigin; i < xSubOrigin + 2; i++)
-			for(int j = ySubOrigin; j < ySubOrigin + 2; j++)
+		for(int i = xSubOrigin; i <= xSubOrigin + 2; i++)
+			for(int j = ySubOrigin; j <= ySubOrigin + 2; j++)
 			{
-				if(x != i &&
-						y != j &&
-						value == actualBoard[i][j].getValue())
-				squareValid = false;
-			}
-		
+				if(x != i && y != j && value == actualBoard[i][j].getValue())
+					squareValid = false;
+			}		
 		
 		return xValid && yValid && squareValid;
+	}
+	
+	public boolean finalCheck()
+	{
+		boolean result = true;
+		
+		for(int i = 0; i < 9; i++)
+		{
+			for(int j = 0; j < 9; j++)
+			{
+				if(actualBoard[i][j].getValue() == 0)
+					result = false;
+				else if(!this.checkNum(i, j, actualBoard[i][j].getValue()))
+					result = false;
+			}
+		}
+		return result;
 	}
 	
 	/**
@@ -202,11 +250,12 @@ public class Board {
 	public String toString()
 	{
 		String result = "";
-		for(int y = 8; y > -1; y--)
+		//for(int y = 8; y > -1; y--)
+		for(int y = 8; y >= 0; y--)
 		{
 			for(int x = 0; x < 9; x++)
 			{
-				result = result + actualBoard[x][y].toString();
+				result = result + actualBoard[x][y].toString() + " ";
 			}
 			result = result + "\n";
 		}

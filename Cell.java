@@ -36,7 +36,7 @@ public class Cell {
 		if(!(value < 1 || value > 9))	
 			this.value = value;
 		else
-			this.value = -1;
+			this.value = 0;
 	}
 	
 	/**
